@@ -88,3 +88,8 @@ Os packs estão com cobertura parcial e placeholders. Campos normativos contêm 
 pytest
 python -m compileall engine backend
 ```
+
+## API (modo temporário)
+
+Para facilitar a configuração do motor de regras no MVP, a API DRF está temporariamente sem exigência de autenticação (`AllowAny`).
+Quando a fase de configuração terminar, restaurar `IsAuthenticated` nas configurações globais e nas views necessárias.
