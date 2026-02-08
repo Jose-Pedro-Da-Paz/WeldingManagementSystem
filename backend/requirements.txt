@@ -2,3 +2,5 @@ Django>=4.2,<5.0
 djangorestframework>=3.15
 djangorestframework-simplejwt>=5.3
 psycopg[binary]>=3.2
+jsonschema>=4.23
+pytest>=8.0

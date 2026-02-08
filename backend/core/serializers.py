@@ -10,6 +10,7 @@ class ProcedureSerializer(serializers.ModelSerializer):
 
 
 class RuleEvaluationInputSerializer(serializers.Serializer):
-    standard_slug = serializers.CharField()
-    current = serializers.JSONField()
-    previous = serializers.JSONField(required=False, default=dict)
+    rule_pack = serializers.CharField(help_text="Relative path, e.g. iso_15614_1/rules.json")
+    payload = serializers.JSONField()
+    previous_payload = serializers.JSONField(required=False, default=None)
+    debug = serializers.BooleanField(required=False, default=False)

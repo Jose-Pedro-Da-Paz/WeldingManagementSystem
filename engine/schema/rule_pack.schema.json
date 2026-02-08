@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://welding.local/rule-pack.schema.json",
+  "type": "object",
+  "required": ["standard", "part", "version", "scope", "metadata", "definitions", "variables", "rules", "ranges", "tests", "validations"],
+  "properties": {
+    "standard": {"type": "string"},
+    "part": {"type": "string"},
+    "version": {"type": "string"},
+    "scope": {"type": "string"},
+    "includes": {"type": "array", "items": {"type": "string"}},
+    "overrides": {"type": "array", "items": {"type": "object"}},
+    "metadata": {
+      "type": "object",
+      "required": ["source", "compiled_by", "compiled_at", "coverage_notes", "copyright_notice"],
+      "properties": {
+        "source": {"type": "string"},
+        "compiled_by": {"type": "string"},
+        "compiled_at": {"type": "string"},
+        "coverage_notes": {"type": "string"},
+        "copyright_notice": {"type": "string"}
+      }
+    },
+    "definitions": {"type": "object"},
+    "variables": {"type": "array", "items": {"type": "object", "required": ["id", "type", "applies_to", "classification"]}},
+    "rules": {"type": "array", "items": {"type": "object", "required": ["id", "when", "then"]}},
+    "ranges": {"type": "array", "items": {"type": "object", "required": ["id", "when", "compute"]}},
+    "tests": {"type": "array", "items": {"type": "object", "required": ["id", "when", "require"]}},
+    "validations": {"type": "array", "items": {"type": "object", "required": ["id", "severity"]}}
+  }
+}
