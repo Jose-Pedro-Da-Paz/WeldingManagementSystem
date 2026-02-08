@@ -1,9 +1,13 @@
 from pathlib import Path
+import os
+from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "dev-secret-key"
 DEBUG = True
 ALLOWED_HOSTS = ["*"]
+
+load_dotenv(BASE_DIR/".env")
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -46,11 +50,21 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "welding",
-        "USER": "welding",
-        "PASSWORD": "welding",
-        "HOST": "localhost",
-        "PORT": "5432",
+        "NAME": os.getenv("DB_NAME", "postgres"),
+        "USER": os.getenv("DB_USER"),
+        "PASSWORD": os.getenv("DB_PASSWORD"),
+        "HOST": os.getenv("DB_HOST"),
+        "PORT": os.getenv("DB_PORT", "5432"),
+        "OPTIONS": {
+            "sslmode": os.getenv("DB_SSLMODE", "require"),
+            "connect_timeout": 15,
+            "prepare_threshold": 0,
+            "keepalives": 1,
+            "keepalives_idle": 30,
+            "keepalives_interval": 10,
+            "keepalives_count": 5,
+        },
+        "CONN_MAX_AGE": 60,
     }
 }
 
