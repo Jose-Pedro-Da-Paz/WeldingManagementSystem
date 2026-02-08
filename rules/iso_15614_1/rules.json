@@ -1,0 +1,68 @@
+{
+  "standard": "ISO_15614",
+  "part": "1",
+  "version": "20XX",
+  "scope": "procedure_qualification",
+  "metadata": {
+    "source": "needs_licensed_source_review",
+    "compiled_by": "agent",
+    "compiled_at": "2026-02-08",
+    "coverage_notes": "MVP partial coverage with placeholders for essential/supplementary variables.",
+    "copyright_notice": "No verbatim text from standards stored."
+  },
+  "definitions": {
+    "doc_types": ["pWPS", "PQR", "WPS", "WPQ", "continuity_event"],
+    "enums": {
+      "product_form": ["plate", "pipe"],
+      "joint_type": ["BW", "FW"],
+      "severity": ["ERROR", "WARNING", "INFO"],
+      "classification": ["essential", "supplementary_essential", "non_essential"]
+    },
+    "catalog_refs": {
+      "materials": "common/materials.json",
+      "processes": "common/processes.json",
+      "positions": "common/positions.json"
+    }
+  },
+  "variables": [
+    {"id": "process", "label": "Processo", "type": "select", "applies_to": ["pWPS", "PQR", "WPS"], "classification": "essential", "required": true, "reference": "ISO 15614-1:20XX Cl. X.Y", "needs_verification": true, "confidence": "unknown"},
+    {"id": "base_material_group", "label": "Grupo material base", "type": "select", "applies_to": ["PQR", "WPS"], "classification": "essential", "required": true, "reference": "ISO 15614-1:20XX Cl. X.Y", "needs_verification": true, "confidence": "unknown"},
+    {"id": "joint_type", "label": "Tipo de junta", "type": "select", "applies_to": ["PQR", "WPS"], "classification": "supplementary_essential", "required": true, "reference": "ISO 15614-1:20XX Cl. X.Y", "needs_verification": true, "confidence": "unknown"}
+  ],
+  "rules": [
+    {
+      "id": "iso15614_essential_var_change_process",
+      "applies_to": ["PQR", "WPS"],
+      "when": {"all": [{"field": "inputs.process", "op": "changed", "value": true}]},
+      "then": {
+        "add_finding": {"severity": "ERROR", "field": "inputs.process", "message": "Mudança no processo requer nova qualificação do procedimento.", "reference": "ISO 15614-1:20XX Cl. X.Y", "needs_verification": true, "confidence": "unknown"},
+        "invalidate": true
+      }
+    },
+    {
+      "id": "iso15614_change_joint_type_warning",
+      "applies_to": ["WPS"],
+      "when": {"all": [{"field": "inputs.joint_type", "op": "changed", "value": true}]},
+      "then": {
+        "add_finding": {"severity": "WARNING", "field": "inputs.joint_type", "message": "Mudança de junta pode exigir revisão de escopo de qualificação.", "reference": "ISO 15614-1:20XX Cl. X.Y", "needs_verification": true, "confidence": "unknown"}
+      }
+    }
+  ],
+  "ranges": [
+    {
+      "id": "range_thickness_approval",
+      "applies_to": ["WPS", "PQR"],
+      "when": {"all": [{"field": "inputs.thickness_tested_mm", "op": "exists", "value": true}]},
+      "compute": {"output_field": "computed.thickness_approved_mm", "expression": "RANGE_THICKNESS(inputs.thickness_tested_mm, context.product_form)"},
+      "reference": "ISO 15614-1:20XX Cl. X.Y",
+      "needs_verification": true
+    }
+  ],
+  "tests": [
+    {"id": "tests_for_process_135", "when": {"all": [{"field": "inputs.process", "op": "eq", "value": "135"}]}, "require": ["VT", "RT", "Bend"], "reference": "ISO 15614-1:20XX Cl. X.Y", "needs_verification": true},
+    {"id": "tests_for_pipe_profile", "when": {"all": [{"field": "context.product_form", "op": "eq", "value": "pipe"}]}, "require": ["VT", "macro"], "reference": "ISO 15614-1:20XX Cl. X.Y", "needs_verification": true}
+  ],
+  "validations": [
+    {"id": "required_fields_pqr", "applies_to": ["PQR"], "require_fields": ["inputs.process", "inputs.base_material_group", "inputs.thickness_tested_mm"], "severity": "ERROR", "message": "Campos obrigatórios ausentes para registro PQR.", "reference": "ISO 15614-1:20XX Cl. X.Y", "needs_verification": true}
+  ]
+}
