@@ -1,0 +1,71 @@
+{
+  "standard": "ISO_15614_1",
+  "version": "2024",
+  "scope": "Procedure Qualification",
+  "variables": [
+    {
+      "id": "base_material_group",
+      "label": "Grupo de Material Base",
+      "type": "select",
+      "classification": "essential",
+      "applies_to": ["pWPS", "PQR", "WPS"],
+      "options": ["FM1", "FM2", "FM3"],
+      "description": "Grupo de material conforme norma",
+      "reference": "ISO 15614-1 §8.2"
+    },
+    {
+      "id": "process",
+      "label": "Processo de Soldagem",
+      "type": "select",
+      "classification": "essential",
+      "applies_to": ["PQR", "WPS"],
+      "options": ["135", "141"],
+      "description": "Código de processo conforme ISO 4063",
+      "reference": "ISO 15614-1 §6"
+    }
+  ],
+  "rules": [
+    {
+      "id": "material_group_change",
+      "trigger": {
+        "variable": "base_material_group",
+        "change": true
+      },
+      "effect": {
+        "invalidate": ["PQR", "WPS"],
+        "require_new_test": true
+      },
+      "message": "Alteração do grupo de material invalida a qualificação",
+      "reference": "ISO 15614-1 §8.3"
+    },
+    {
+      "id": "process_135_needs_rt",
+      "trigger": {
+        "variable": "process",
+        "equals": "135"
+      },
+      "effect": {
+        "invalidate": [],
+        "require_new_test": false
+      },
+      "message": "Processo 135 requer verificação de ensaios RT no plano de testes",
+      "reference": "ISO 15614-1 §6"
+    }
+  ],
+  "approval_ranges": [
+    {
+      "based_on": "thickness",
+      "formula": "t <= 2t_tested",
+      "reference": "ISO 15614-1 §8.4"
+    }
+  ],
+  "required_tests": [
+    {
+      "condition": {
+        "process": "135"
+      },
+      "tests": ["VT", "RT", "Bend"],
+      "reference": "ISO 15614-1 §6"
+    }
+  ]
+}
