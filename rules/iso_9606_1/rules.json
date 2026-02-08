@@ -1,0 +1,43 @@
+{
+  "standard": "ISO_9606",
+  "part": "1",
+  "version": "20XX",
+  "scope": "welder_qualification",
+  "metadata": {
+    "source": "needs_licensed_source_review",
+    "compiled_by": "agent",
+    "compiled_at": "2026-02-08",
+    "coverage_notes": "MVP placeholders for welder variables, continuity and expiry logic.",
+    "copyright_notice": "No verbatim text from standards stored."
+  },
+  "definitions": {
+    "doc_types": ["WPQ", "continuity_event"],
+    "enums": {"severity": ["ERROR", "WARNING", "INFO"]},
+    "catalog_refs": {"materials": "common/materials.json", "processes": "common/processes.json", "positions": "common/positions.json"}
+  },
+  "variables": [
+    {"id": "process", "type": "select", "applies_to": ["WPQ"], "classification": "essential", "required": true, "reference": "ISO 9606-1:20XX Cl. X.Y", "needs_verification": true},
+    {"id": "position", "type": "select", "applies_to": ["WPQ"], "classification": "essential", "required": true, "reference": "ISO 9606-1:20XX Cl. X.Y", "needs_verification": true},
+    {"id": "continuity_last_date", "type": "date", "applies_to": ["continuity_event", "WPQ"], "classification": "essential", "required": false, "reference": "ISO 9606-1:20XX Cl. X.Y", "needs_verification": true}
+  ],
+  "rules": [
+    {
+      "id": "iso9606_missing_continuity_event",
+      "applies_to": ["WPQ"],
+      "when": {"all": [{"field": "inputs.months_since_last_continuity", "op": "gt", "value": 6}]},
+      "then": {
+        "add_finding": {"severity": "ERROR", "field": "inputs.months_since_last_continuity", "message": "Período de continuidade excedido; verificar requalificação.", "reference": "ISO 9606-1:20XX Cl. X.Y", "needs_verification": true},
+        "invalidate": true
+      }
+    }
+  ],
+  "ranges": [
+    {"id": "range_position_approval", "when": {"all": [{"field": "inputs.position", "op": "exists", "value": true}]}, "compute": {"output_field": "computed.positions_approved", "expression": "RANGE_POSITION(inputs.position)"}, "reference": "ISO 9606-1:20XX Cl. X.Y", "needs_verification": true}
+  ],
+  "tests": [
+    {"id": "wpq_periodic_visual", "when": {"all": [{"field": "doc_type", "op": "eq", "value": "WPQ"}]}, "require": ["VT"], "reference": "ISO 9606-1:20XX Cl. X.Y", "needs_verification": true}
+  ],
+  "validations": [
+    {"id": "required_fields_wpq", "applies_to": ["WPQ"], "require_fields": ["inputs.process", "inputs.position", "inputs.base_material_group"], "severity": "ERROR", "message": "Campos essenciais ausentes para WPQ.", "reference": "ISO 9606-1:20XX Cl. X.Y", "needs_verification": true}
+  ]
+}
