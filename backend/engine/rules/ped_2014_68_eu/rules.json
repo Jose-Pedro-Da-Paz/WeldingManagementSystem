@@ -1,0 +1,9 @@
+{
+  "standard": "TEMPLATE",
+  "version": "2024",
+  "scope": "Template",
+  "variables": [],
+  "rules": [],
+  "approval_ranges": [],
+  "required_tests": []
+}

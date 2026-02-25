@@ -1,0 +1,49 @@
+{
+  "standard": "PED_2014_68_EU",
+  "part": "directive",
+  "version": "2014/68/EU",
+  "scope": "pressure_equipment_compliance",
+  "includes": [
+    "iso_15614_1/rules.json",
+    "iso_9606_1/rules.json"
+  ],
+  "overrides": [],
+  "metadata": {
+    "source": "public_directive_plus_harmonized_standards_mapping_needed",
+    "compiled_by": "agent",
+    "compiled_at": "2026-02-08",
+    "coverage_notes": "High-level gating rules for dossier completeness and qualification traceability.",
+    "copyright_notice": "No verbatim legal text stored."
+  },
+  "definitions": {
+    "doc_types": ["pressure_dossier"],
+    "enums": {"severity": ["ERROR", "WARNING", "INFO"]}
+  },
+  "variables": [
+    {"id": "pressure_equipment", "type": "boolean", "applies_to": ["pressure_dossier"], "classification": "essential", "required": true, "reference": "PED 2014/68/EU Art./Annex (placeholder)", "needs_verification": true},
+    {"id": "conformity_module", "type": "string", "applies_to": ["pressure_dossier"], "classification": "essential", "required": false, "reference": "PED 2014/68/EU Art./Annex (placeholder)", "needs_verification": true}
+  ],
+  "rules": [
+    {
+      "id": "ped_requires_valid_qualifications",
+      "applies_to": ["pressure_dossier"],
+      "when": {
+        "all": [
+          {"field": "context.pressure_equipment", "op": "eq", "value": true},
+          {"field": "inputs.wps_valid", "op": "eq", "value": false}
+        ]
+      },
+      "then": {
+        "add_finding": {"severity": "ERROR", "field": "inputs.wps_valid", "message": "Dossiê PED exige WPS/PQR/WPQ válidos e rastreáveis.", "reference": "PED 2014/68/EU + harmonized standards mapping (placeholder)", "needs_verification": true},
+        "invalidate": true
+      }
+    }
+  ],
+  "ranges": [],
+  "tests": [
+    {"id": "ped_dossier_checks", "when": {"all": [{"field": "context.pressure_equipment", "op": "eq", "value": true}]}, "require": ["technical_file_completeness_review"], "reference": "PED 2014/68/EU (placeholder)", "needs_verification": true}
+  ],
+  "validations": [
+    {"id": "ped_required_flags", "applies_to": ["pressure_dossier"], "require_fields": ["context.pressure_equipment", "inputs.wps_valid", "inputs.pqr_valid", "inputs.wpq_valid"], "severity": "ERROR", "message": "Campos obrigatórios do dossiê PED ausentes.", "reference": "PED 2014/68/EU (placeholder)", "needs_verification": true}
+  ]
+}

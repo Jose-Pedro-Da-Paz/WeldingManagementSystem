@@ -1,0 +1,36 @@
+{
+  "standard": "ISO_3834",
+  "part": "all",
+  "version": "20XX",
+  "scope": "quality_management",
+  "metadata": {
+    "source": "needs_licensed_source_review",
+    "compiled_by": "agent",
+    "compiled_at": "2026-02-08",
+    "coverage_notes": "Checklist-oriented compliance controls for document/audit readiness.",
+    "copyright_notice": "No verbatim text from standards stored."
+  },
+  "definitions": {
+    "doc_types": ["quality_dossier"],
+    "enums": {"severity": ["ERROR", "WARNING", "INFO"]}
+  },
+  "variables": [
+    {"id": "welding_coordinator_assigned", "type": "boolean", "applies_to": ["quality_dossier"], "classification": "essential", "required": true, "reference": "ISO 3834:20XX Cl. X.Y", "needs_verification": true},
+    {"id": "traceability_matrix", "type": "boolean", "applies_to": ["quality_dossier"], "classification": "essential", "required": true, "reference": "ISO 3834:20XX Cl. X.Y", "needs_verification": true}
+  ],
+  "rules": [
+    {
+      "id": "iso3834_missing_traceability",
+      "when": {"all": [{"field": "inputs.traceability_matrix", "op": "eq", "value": false}]},
+      "then": {
+        "add_finding": {"severity": "ERROR", "field": "inputs.traceability_matrix", "message": "Dossiê sem matriz de rastreabilidade.", "reference": "ISO 3834:20XX Cl. X.Y", "needs_verification": true},
+        "invalidate": true
+      }
+    }
+  ],
+  "ranges": [],
+  "tests": [],
+  "validations": [
+    {"id": "quality_dossier_required", "applies_to": ["quality_dossier"], "require_fields": ["inputs.welding_coordinator_assigned", "inputs.traceability_matrix"], "severity": "ERROR", "message": "Checklist ISO 3834 incompleto.", "reference": "ISO 3834:20XX Cl. X.Y", "needs_verification": true}
+  ]
+}

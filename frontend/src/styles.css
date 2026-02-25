@@ -1,0 +1,17 @@
+:root {
+  color-scheme: light dark;
+  font-family: Inter, system-ui, sans-serif;
+}
+body { margin: 0; }
+.layout { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+.sidebar { padding: 1rem; border-right: 1px solid #777; }
+.sidebar nav { display: grid; gap: 0.5rem; }
+.content { padding: 1.25rem; display: grid; gap: 1rem; }
+.card { border: 1px solid #666; border-radius: 8px; padding: 0.8rem; display: grid; gap: 0.6rem; }
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(220px, 1fr)); gap: 0.6rem; }
+label { display: grid; gap: 0.25rem; font-size: 0.92rem; }
+input, textarea, select, button { padding: 0.45rem; border-radius: 6px; border: 1px solid #777; }
+.tabs { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.5rem; }
+.tabs button.active { border-color: #4aa3ff; }
+.reval-row { display: grid; grid-template-columns: 1.1fr 1fr 1.5fr 1.5fr auto; gap: 0.4rem; }
+.preview { background: rgba(120,120,120,0.08); }
